@@ -1,14 +1,11 @@
 import React from 'react';
-import './App.css';
 import FileUpload from './components/FileUpload';
+import './index.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Image to PDF Converter</h1>
-        <FileUpload />
-      </header>
+    <div className="p-4 sm:px-8 md:px-16 min-h-screen background">
+      <FileUpload />
     </div>
   );
 }
