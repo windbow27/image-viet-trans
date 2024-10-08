@@ -5,6 +5,7 @@ const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [status, setStatus] = useState({ message: '', type: '' });
   const [pdfUrl, setPdfUrl] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -19,6 +20,7 @@ const FileUpload = () => {
     }
 
     setStatus({ message: 'Uploading file...', type: 'info' });
+    setIsProcessing(true);
 
     const formData = new FormData();
     formData.append('image', selectedFile);
@@ -38,6 +40,7 @@ const FileUpload = () => {
     } catch (error) {
       console.error('Error uploading file:', error);
       setStatus({ message: 'Error uploading file.', type: 'error' });
+      setIsProcessing(false);
     }
   };
 
@@ -50,11 +53,13 @@ const FileUpload = () => {
         if (statusResponse.data.status === 'Complete') {
           setStatus({ message: 'File processed successfully.', type: 'success' });
           setPdfUrl(statusResponse.data.url);
+          setIsProcessing(false);
           clearInterval(interval);
         }
       } catch (error) {
         console.error('Error checking status:', error);
         setStatus({ message: 'Error processing file.', type: 'error' });
+        setIsProcessing(false);
         clearInterval(interval);
       }
     }, 3000); // Poll every 3 seconds
@@ -63,7 +68,7 @@ const FileUpload = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen ">
       <div className="text-center">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">
+        <h2 className="text-xl font-semibold text-primary mb-6">
           Upload an Image to Convert to Vietnamese PDF
         </h2>
       </div>
@@ -86,8 +91,9 @@ const FileUpload = () => {
         <button
           type="submit"
           className="w-full mt-4 btn btn-primary"
+          disabled={isProcessing}
         >
-          Upload
+          {isProcessing ? 'Processing...' : 'Upload'}
         </button>
       </form>
       <p className={`mt-4 ${status.type === 'error' ? 'text-error' : status.type === 'success' ? 'text-success' : 'text-info'}`}>

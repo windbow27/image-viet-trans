@@ -11,6 +11,9 @@ const PORT = 3000;
 
 app.use(cors());
 
+// Serve static files from the 'output' directory
+app.use('/output', express.static(path.join(__dirname, 'output')));
+
 // Upload route
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {

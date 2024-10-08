@@ -15,8 +15,6 @@ async function createPdfFromText(text, outputPath) {
            .text(text, {
                align: 'left',
                indent: 30,
-               height: 300,
-               ellipsis: true
            });
 
         doc.end();
